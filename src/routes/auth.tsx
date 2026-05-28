@@ -160,8 +160,10 @@ function RegisterForm() {
         {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />} Create account
       </Button>
       <p className="text-xs text-muted-foreground text-center">
-        Accounts are created as Worker by default. Admins are assigned in the backend.
+        Accounts are created as Worker by default.{" "}
+        <Link to="/auth/admin" className="text-primary hover:underline">Administrator sign-up</Link>
       </p>
     </form>
   );
 }
+
