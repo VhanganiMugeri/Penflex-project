@@ -31,23 +31,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const loadProfile = async (userId: string) => {
-    const [{ data: p }, { data: r }] = await Promise.all([
+    const [{ data: p, error: profileError }, { data: r, error: roleError }] = await Promise.all([
       supabase.from("profiles").select("*").eq("id", userId).maybeSingle(),
       supabase.from("user_roles").select("role").eq("user_id", userId),
     ]);
+    if (profileError) console.error("Profile load failed:", profileError);
+    if (roleError) console.error("Role load failed:", roleError);
     setProfile((p as Profile) ?? null);
     const roles = (r ?? []).map((x: { role: AppRole }) => x.role);
-    setRole(roles.includes("admin") ? "admin" : roles.includes("worker") ? "worker" : null);
+    setRole(roles.includes("admin") ? "admin" : "worker");
   };
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_evt, s) => {
       setSession(s);
       if (s?.user) {
-        setTimeout(() => loadProfile(s.user.id), 0);
+        setTimeout(() => loadProfile(s.user.id).finally(() => setLoading(false)), 0);
       } else {
         setProfile(null);
         setRole(null);
+        setLoading(false);
       }
     });
 
