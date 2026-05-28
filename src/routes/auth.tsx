@@ -126,6 +126,10 @@ function RegisterForm() {
     else toast.success("Account created! Signing you in…");
   };
 
+  return (
+    <form onSubmit={submit} className="space-y-4">
+      <div className="grid grid-cols-2 gap-3">
+
         <div>
           <Label htmlFor="fullName">Full name</Label>
           <Input id="fullName" required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} />
