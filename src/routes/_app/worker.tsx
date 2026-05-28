@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,7 +9,12 @@ import { StatusBadge, PriorityBadge, DeptBadge } from "@/components/TicketBadges
 import { Plus, Ticket, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
-export const Route = createFileRoute("/_app/worker")({ component: WorkerDashboard });
+export const Route = createFileRoute("/_app/worker")({ component: WorkerRoute });
+
+function WorkerRoute() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  return path === "/worker" ? <WorkerDashboard /> : <Outlet />;
+}
 
 function WorkerDashboard() {
   const { user } = useAuth();
