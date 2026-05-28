@@ -104,6 +104,10 @@ function RegisterForm() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.email.toLowerCase().endsWith("@penflex.org.za")) {
+      toast.error("Email must end with @penflex.org.za");
+      return;
+    }
     if (form.password.length < 6) { toast.error("Password must be at least 6 characters"); return; }
     if (!form.department) { toast.error("Please select a department"); return; }
     setLoading(true);
@@ -123,6 +127,7 @@ function RegisterForm() {
   return (
     <form onSubmit={submit} className="space-y-4">
       <div className="grid grid-cols-2 gap-3">
+
         <div>
           <Label htmlFor="fullName">Full name</Label>
           <Input id="fullName" required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} />
@@ -153,8 +158,10 @@ function RegisterForm() {
         {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />} Create account
       </Button>
       <p className="text-xs text-muted-foreground text-center">
-        Accounts are created as Worker by default. Admins are assigned in the backend.
+        Accounts are created as Worker by default.{" "}
+        <Link to="/auth/admin" className="text-primary hover:underline">Administrator sign-up</Link>
       </p>
     </form>
   );
 }
+

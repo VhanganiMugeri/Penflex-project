@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthAdminRouteImport } from './routes/auth.admin'
 import { Route as AppWorkerRouteImport } from './routes/_app/worker'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppHistoryRouteImport } from './routes/_app/history'
@@ -32,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthAdminRoute = AuthAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthRoute,
 } as any)
 const AppWorkerRoute = AppWorkerRouteImport.update({
   id: '/worker',
@@ -66,21 +72,23 @@ const AppTicketsIdRoute = AppTicketsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/admin': typeof AppAdminRoute
   '/history': typeof AppHistoryRoute
   '/profile': typeof AppProfileRoute
   '/worker': typeof AppWorkerRouteWithChildren
+  '/auth/admin': typeof AuthAdminRoute
   '/tickets/$id': typeof AppTicketsIdRoute
   '/worker/new': typeof AppWorkerNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/admin': typeof AppAdminRoute
   '/history': typeof AppHistoryRoute
   '/profile': typeof AppProfileRoute
   '/worker': typeof AppWorkerRouteWithChildren
+  '/auth/admin': typeof AuthAdminRoute
   '/tickets/$id': typeof AppTicketsIdRoute
   '/worker/new': typeof AppWorkerNewRoute
 }
@@ -88,11 +96,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/_app/admin': typeof AppAdminRoute
   '/_app/history': typeof AppHistoryRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/worker': typeof AppWorkerRouteWithChildren
+  '/auth/admin': typeof AuthAdminRoute
   '/_app/tickets/$id': typeof AppTicketsIdRoute
   '/_app/worker/new': typeof AppWorkerNewRoute
 }
@@ -105,6 +114,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/profile'
     | '/worker'
+    | '/auth/admin'
     | '/tickets/$id'
     | '/worker/new'
   fileRoutesByTo: FileRoutesByTo
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/history'
     | '/profile'
     | '/worker'
+    | '/auth/admin'
     | '/tickets/$id'
     | '/worker/new'
   id:
@@ -126,6 +137,7 @@ export interface FileRouteTypes {
     | '/_app/history'
     | '/_app/profile'
     | '/_app/worker'
+    | '/auth/admin'
     | '/_app/tickets/$id'
     | '/_app/worker/new'
   fileRoutesById: FileRoutesById
@@ -133,7 +145,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -158,6 +170,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/auth/admin': {
+      id: '/auth/admin'
+      path: '/admin'
+      fullPath: '/auth/admin'
+      preLoaderRoute: typeof AuthAdminRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/_app/worker': {
       id: '/_app/worker'
@@ -234,10 +253,20 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface AuthRouteChildren {
+  AuthAdminRoute: typeof AuthAdminRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthAdminRoute: AuthAdminRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

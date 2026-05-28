@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -13,20 +13,31 @@ import { Loader2, Sparkles } from "lucide-react";
 import { classifyTicket } from "@/lib/ai-classify";
 import { DeptBadge } from "@/components/TicketBadges";
 
+
 export const Route = createFileRoute("/_app/worker/new")({ component: NewTicket });
 
 function NewTicket() {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    fullName: profile?.full_name ?? "",
-    employeeId: profile?.employee_id ?? "",
-    department: profile?.department ?? "",
+    fullName: "",
+    employeeId: "",
+    department: "",
     title: "",
     description: "",
     priority: "Medium",
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!profile) return;
+    setForm((f) => ({
+      ...f,
+      fullName: f.fullName || profile.full_name || "",
+      employeeId: f.employeeId || profile.employee_id || "",
+      department: f.department || profile.department || "",
+    }));
+  }, [profile]);
 
   const aiResult = useMemo(() => {
     if (!form.title && !form.description) return null;
@@ -35,26 +46,36 @@ function NewTicket() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user) { toast.error("You must be signed in"); return; }
+    if (!form.fullName.trim() || !form.employeeId.trim()) { toast.error("Enter your name and employee ID"); return; }
     if (!form.department) { toast.error("Select your department"); return; }
+    if (!form.title.trim() || !form.description.trim()) { toast.error("Title and description are required"); return; }
     setLoading(true);
-    const ai = classifyTicket(`${form.title} ${form.description}`);
-    const { error } = await supabase.from("tickets").insert({
-      worker_id: user.id,
-      full_name: form.fullName,
-      employee_id: form.employeeId,
-      department: form.department as any,
-      title: form.title,
-      description: form.description,
-      priority: form.priority as any,
-      ai_classification: ai.department,
-      ai_confidence: ai.confidence,
-    });
-    setLoading(false);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Ticket submitted! Admins have been notified.");
-    navigate({ to: "/worker" });
+    try {
+      const ai = classifyTicket(`${form.title} ${form.description}`);
+      const { error } = await supabase.from("tickets").insert({
+        worker_id: user.id,
+        full_name: form.fullName,
+        employee_id: form.employeeId,
+        department: form.department as "HR" | "IT" | "Finance" | "Operations",
+        title: form.title,
+        description: form.description,
+        priority: form.priority as "Low" | "Medium" | "High",
+        ai_classification: ai.department,
+        ai_confidence: ai.confidence,
+      });
+      if (error) throw error;
+      toast.success("Ticket submitted! Admins have been notified.");
+      navigate({ to: "/worker" });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to submit ticket";
+      console.error("Ticket insert failed:", err);
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
