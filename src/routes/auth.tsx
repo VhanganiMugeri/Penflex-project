@@ -101,7 +101,7 @@ function LoginForm() {
 function RegisterForm() {
   const [form, setForm] = useState({ email: "", password: "", fullName: "", employeeId: "", department: "" });
 function RegisterForm() {
-  const [form, setForm] = useState({ email: "", password: "", fullName: "", employeeId: "", department: "" });
+
   const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
