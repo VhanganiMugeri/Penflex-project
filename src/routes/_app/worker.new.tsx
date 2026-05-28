@@ -30,14 +30,14 @@ function NewTicket() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!profile) return;
+    const metadata = user?.user_metadata ?? {};
     setForm((f) => ({
       ...f,
-      fullName: f.fullName || profile.full_name || "",
-      employeeId: f.employeeId || profile.employee_id || "",
-      department: f.department || profile.department || "",
+      fullName: f.fullName || profile?.full_name || String(metadata.full_name ?? ""),
+      employeeId: f.employeeId || profile?.employee_id || String(metadata.employee_id ?? ""),
+      department: f.department || profile?.department || String(metadata.department ?? ""),
     }));
-  }, [profile]);
+  }, [profile, user]);
 
   const aiResult = useMemo(() => {
     if (!form.title && !form.description) return null;
