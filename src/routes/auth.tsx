@@ -100,10 +100,16 @@ function LoginForm() {
 
 function RegisterForm() {
   const [form, setForm] = useState({ email: "", password: "", fullName: "", employeeId: "", department: "" });
+function RegisterForm() {
+  const [form, setForm] = useState({ email: "", password: "", fullName: "", employeeId: "", department: "" });
   const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.email.toLowerCase().endsWith("@penflex.org.za")) {
+      toast.error("Email must end with @penflex.org.za");
+      return;
+    }
     if (form.password.length < 6) { toast.error("Password must be at least 6 characters"); return; }
     if (!form.department) { toast.error("Please select a department"); return; }
     setLoading(true);
@@ -120,9 +126,6 @@ function RegisterForm() {
     else toast.success("Account created! Signing you in…");
   };
 
-  return (
-    <form onSubmit={submit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-3">
         <div>
           <Label htmlFor="fullName">Full name</Label>
           <Input id="fullName" required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} />
