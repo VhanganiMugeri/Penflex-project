@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          admin_id: string | null
           avatar_url: string | null
           created_at: string
           department: Database["public"]["Enums"]["department_type"] | null
@@ -25,6 +26,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          admin_id?: string | null
           avatar_url?: string | null
           created_at?: string
           department?: Database["public"]["Enums"]["department_type"] | null
@@ -34,6 +36,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          admin_id?: string | null
           avatar_url?: string | null
           created_at?: string
           department?: Database["public"]["Enums"]["department_type"] | null
