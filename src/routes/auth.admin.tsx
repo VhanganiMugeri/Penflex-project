@@ -1,7 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { z } from "zod";
-import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -12,12 +10,12 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Loader2, ShieldCheck } from "lucide-react";
 
-const adminSearchSchema = z.object({
-  mode: fallback(z.enum(["signup", "login"]), "signup").default("signup"),
-});
+type AdminMode = "signup" | "login";
 
 export const Route = createFileRoute("/auth/admin")({
-  validateSearch: zodValidator(adminSearchSchema),
+  validateSearch: (s: Record<string, unknown>): { mode: AdminMode } => ({
+    mode: s.mode === "login" ? "login" : "signup",
+  }),
   component: AdminAuthPage,
 });
 
