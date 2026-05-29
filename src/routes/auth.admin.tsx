@@ -1,5 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { z } from "zod";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Card } from "@/components/ui/card";
@@ -10,11 +12,21 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Loader2, ShieldCheck } from "lucide-react";
 
-export const Route = createFileRoute("/auth/admin")({ component: AdminAuthPage });
+const adminSearchSchema = z.object({
+  mode: fallback(z.enum(["signup", "login"]), "signup").default("signup"),
+});
+
+export const Route = createFileRoute("/auth/admin")({
+  validateSearch: zodValidator(adminSearchSchema),
+  component: AdminAuthPage,
+});
 
 function AdminAuthPage() {
-  const [tab, setTab] = useState<"signup" | "login">("signup");
+  const { mode } = Route.useSearch();
+  const [tab, setTab] = useState<"signup" | "login">(mode);
   const [adminExists, setAdminExists] = useState<boolean | null>(null);
+
+  useEffect(() => { setTab(mode); }, [mode]);
 
   useEffect(() => {
     (async () => {

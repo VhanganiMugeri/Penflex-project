@@ -159,7 +159,7 @@ function RegisterForm() {
       </Button>
       <p className="text-xs text-muted-foreground text-center">
         Accounts are created as Worker by default.{" "}
-        <Link to="/auth/admin" className="text-primary hover:underline">Administrator sign-up</Link>
+        <Link to="/auth/admin" search={{ mode: "signup" }} className="text-primary hover:underline">Administrator sign-up</Link>
       </p>
     </form>
   );
