@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,7 +24,10 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { mode } = Route.useSearch();
   const navigate = useNavigate();
+  const path = useRouterState({ select: (s) => s.location.pathname });
   const { session, role, loading: authLoading } = useAuth();
+
+  if (path !== "/auth") return <Outlet />;
 
   useEffect(() => {
     if (!authLoading && session && role) {
