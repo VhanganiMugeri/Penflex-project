@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthAdminSignupRouteImport } from './routes/auth.admin-signup'
 import { Route as AuthAdminRouteImport } from './routes/auth.admin'
 import { Route as AppWorkerRouteImport } from './routes/_app/worker'
 import { Route as AppProfileRouteImport } from './routes/_app/profile'
@@ -33,6 +34,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthAdminSignupRoute = AuthAdminSignupRouteImport.update({
+  id: '/admin-signup',
+  path: '/admin-signup',
+  getParentRoute: () => AuthRoute,
 } as any)
 const AuthAdminRoute = AuthAdminRouteImport.update({
   id: '/admin',
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AppProfileRoute
   '/worker': typeof AppWorkerRouteWithChildren
   '/auth/admin': typeof AuthAdminRoute
+  '/auth/admin-signup': typeof AuthAdminSignupRoute
   '/tickets/$id': typeof AppTicketsIdRoute
   '/worker/new': typeof AppWorkerNewRoute
 }
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/profile': typeof AppProfileRoute
   '/worker': typeof AppWorkerRouteWithChildren
   '/auth/admin': typeof AuthAdminRoute
+  '/auth/admin-signup': typeof AuthAdminSignupRoute
   '/tickets/$id': typeof AppTicketsIdRoute
   '/worker/new': typeof AppWorkerNewRoute
 }
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/_app/profile': typeof AppProfileRoute
   '/_app/worker': typeof AppWorkerRouteWithChildren
   '/auth/admin': typeof AuthAdminRoute
+  '/auth/admin-signup': typeof AuthAdminSignupRoute
   '/_app/tickets/$id': typeof AppTicketsIdRoute
   '/_app/worker/new': typeof AppWorkerNewRoute
 }
@@ -115,6 +124,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/worker'
     | '/auth/admin'
+    | '/auth/admin-signup'
     | '/tickets/$id'
     | '/worker/new'
   fileRoutesByTo: FileRoutesByTo
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/worker'
     | '/auth/admin'
+    | '/auth/admin-signup'
     | '/tickets/$id'
     | '/worker/new'
   id:
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/_app/profile'
     | '/_app/worker'
     | '/auth/admin'
+    | '/auth/admin-signup'
     | '/_app/tickets/$id'
     | '/_app/worker/new'
   fileRoutesById: FileRoutesById
@@ -170,6 +182,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/auth/admin-signup': {
+      id: '/auth/admin-signup'
+      path: '/admin-signup'
+      fullPath: '/auth/admin-signup'
+      preLoaderRoute: typeof AuthAdminSignupRouteImport
+      parentRoute: typeof AuthRoute
     }
     '/auth/admin': {
       id: '/auth/admin'
@@ -255,10 +274,12 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface AuthRouteChildren {
   AuthAdminRoute: typeof AuthAdminRoute
+  AuthAdminSignupRoute: typeof AuthAdminSignupRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthAdminRoute: AuthAdminRoute,
+  AuthAdminSignupRoute: AuthAdminSignupRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -271,13 +292,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

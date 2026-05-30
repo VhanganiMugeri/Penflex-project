@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,6 +24,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const { mode } = Route.useSearch();
   const navigate = useNavigate();
+  const path = useRouterState({ select: (s) => s.location.pathname });
   const { session, role, loading: authLoading } = useAuth();
 
   useEffect(() => {
@@ -31,6 +32,8 @@ function AuthPage() {
       navigate({ to: role === "admin" ? "/admin" : "/worker" });
     }
   }, [session, role, authLoading, navigate]);
+
+  if (path !== "/auth") return <Outlet />;
 
   return (
     <div className="min-h-screen grid md:grid-cols-2 bg-background">
@@ -159,7 +162,7 @@ function RegisterForm() {
       </Button>
       <p className="text-xs text-muted-foreground text-center">
         Accounts are created as Worker by default.{" "}
-        <Link to="/auth/admin" search={{ mode: "signup" }} className="text-primary hover:underline">Administrator sign-up</Link>
+        <Link to="/auth/admin-signup" className="text-primary hover:underline">Administrator sign-up</Link>
       </p>
     </form>
   );
