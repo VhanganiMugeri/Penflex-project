@@ -27,13 +27,13 @@ function AuthPage() {
   const path = useRouterState({ select: (s) => s.location.pathname });
   const { session, role, loading: authLoading } = useAuth();
 
-  if (path !== "/auth") return <Outlet />;
-
   useEffect(() => {
     if (!authLoading && session && role) {
       navigate({ to: role === "admin" ? "/admin" : "/worker" });
     }
   }, [session, role, authLoading, navigate]);
+
+  if (path !== "/auth") return <Outlet />;
 
   return (
     <div className="min-h-screen grid md:grid-cols-2 bg-background">
