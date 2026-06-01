@@ -10,6 +10,7 @@ import {
   Shield,
   Moon,
   Sun,
+  MessageSquare,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
@@ -17,6 +18,7 @@ import type { ReactNode } from "react";
 const workerNav = [
   { to: "/worker", label: "Dashboard", icon: LayoutDashboard },
   { to: "/worker/new", label: "New Ticket", icon: TicketPlus },
+  { to: "/worker/messages", label: "Messages", icon: MessageSquare },
   { to: "/history", label: "History", icon: History },
   { to: "/profile", label: "Profile", icon: User },
 ];
