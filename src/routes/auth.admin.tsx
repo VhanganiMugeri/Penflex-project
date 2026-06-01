@@ -72,7 +72,7 @@ function AdminAuthPage() {
 
         <div className="mt-6 text-center">
           <Link to="/auth" search={{ mode: "login" }} className="text-xs text-muted-foreground hover:text-primary">
-            ← Back to worker sign in
+            ← Back to employee sign in
           </Link>
         </div>
       </Card>

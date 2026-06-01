@@ -63,7 +63,7 @@ function Landing() {
               {[
                 { icon: Brain, label: "AI Routing", val: "98%" },
                 { icon: Zap, label: "Avg resolve", val: "2.1h" },
-                { icon: Users, label: "Active workers", val: "1.2k" },
+                { icon: Users, label: "Active employees", val: "1.2k" },
                 { icon: BarChart3, label: "Tickets/mo", val: "5.4k" },
               ].map((s, i) => {
                 const Icon = s.icon;
@@ -91,10 +91,10 @@ function Landing() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { icon: Brain, title: "AI Classification", body: "Smart engine auto-categorises tickets into HR, IT, Finance, or Operations." },
-              { icon: Shield, title: "Role-Based Access", body: "Separate dashboards for workers and admins with secure authentication." },
+              { icon: Shield, title: "Role-Based Access", body: "Separate dashboards for employees and admins with secure authentication." },
               { icon: Zap, title: "Real-Time Updates", body: "Live ticket status, instant replies, and live activity feed." },
               { icon: BarChart3, title: "Analytics Dashboard", body: "Track tickets per department, resolution time, and team load." },
-              { icon: Users, title: "Worker Profiles", body: "Capture employee ID, department, and contact info on every ticket." },
+              { icon: Users, title: "Employee Profiles", body: "Capture employee ID, department, and contact info on every ticket." },
               { icon: Sparkles, title: "Modern UI", body: "Clean brown & white design with dark mode and mobile support." },
             ].map((f, i) => {
               const Icon = f.icon;

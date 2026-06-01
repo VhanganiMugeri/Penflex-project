@@ -19,6 +19,7 @@ import { Route as AppProfileRouteImport } from './routes/_app/profile'
 import { Route as AppHistoryRouteImport } from './routes/_app/history'
 import { Route as AppAdminRouteImport } from './routes/_app/admin'
 import { Route as AppWorkerNewRouteImport } from './routes/_app/worker.new'
+import { Route as AppWorkerMessagesRouteImport } from './routes/_app/worker.messages'
 import { Route as AppTicketsIdRouteImport } from './routes/_app/tickets.$id'
 
 const AuthRoute = AuthRouteImport.update({
@@ -70,6 +71,11 @@ const AppWorkerNewRoute = AppWorkerNewRouteImport.update({
   path: '/new',
   getParentRoute: () => AppWorkerRoute,
 } as any)
+const AppWorkerMessagesRoute = AppWorkerMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AppWorkerRoute,
+} as any)
 const AppTicketsIdRoute = AppTicketsIdRouteImport.update({
   id: '/tickets/$id',
   path: '/tickets/$id',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/auth/admin': typeof AuthAdminRoute
   '/auth/admin-signup': typeof AuthAdminSignupRoute
   '/tickets/$id': typeof AppTicketsIdRoute
+  '/worker/messages': typeof AppWorkerMessagesRoute
   '/worker/new': typeof AppWorkerNewRoute
 }
 export interface FileRoutesByTo {
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/auth/admin': typeof AuthAdminRoute
   '/auth/admin-signup': typeof AuthAdminSignupRoute
   '/tickets/$id': typeof AppTicketsIdRoute
+  '/worker/messages': typeof AppWorkerMessagesRoute
   '/worker/new': typeof AppWorkerNewRoute
 }
 export interface FileRoutesById {
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/auth/admin': typeof AuthAdminRoute
   '/auth/admin-signup': typeof AuthAdminSignupRoute
   '/_app/tickets/$id': typeof AppTicketsIdRoute
+  '/_app/worker/messages': typeof AppWorkerMessagesRoute
   '/_app/worker/new': typeof AppWorkerNewRoute
 }
 export interface FileRouteTypes {
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/auth/admin'
     | '/auth/admin-signup'
     | '/tickets/$id'
+    | '/worker/messages'
     | '/worker/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/auth/admin'
     | '/auth/admin-signup'
     | '/tickets/$id'
+    | '/worker/messages'
     | '/worker/new'
   id:
     | '__root__'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/auth/admin'
     | '/auth/admin-signup'
     | '/_app/tickets/$id'
+    | '/_app/worker/messages'
     | '/_app/worker/new'
   fileRoutesById: FileRoutesById
 }
@@ -232,6 +244,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppWorkerNewRouteImport
       parentRoute: typeof AppWorkerRoute
     }
+    '/_app/worker/messages': {
+      id: '/_app/worker/messages'
+      path: '/messages'
+      fullPath: '/worker/messages'
+      preLoaderRoute: typeof AppWorkerMessagesRouteImport
+      parentRoute: typeof AppWorkerRoute
+    }
     '/_app/tickets/$id': {
       id: '/_app/tickets/$id'
       path: '/tickets/$id'
@@ -243,10 +262,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppWorkerRouteChildren {
+  AppWorkerMessagesRoute: typeof AppWorkerMessagesRoute
   AppWorkerNewRoute: typeof AppWorkerNewRoute
 }
 
 const AppWorkerRouteChildren: AppWorkerRouteChildren = {
+  AppWorkerMessagesRoute: AppWorkerMessagesRoute,
   AppWorkerNewRoute: AppWorkerNewRoute,
 }
 

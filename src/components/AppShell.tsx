@@ -10,6 +10,7 @@ import {
   Shield,
   Moon,
   Sun,
+  MessageSquare,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
@@ -17,6 +18,7 @@ import type { ReactNode } from "react";
 const workerNav = [
   { to: "/worker", label: "Dashboard", icon: LayoutDashboard },
   { to: "/worker/new", label: "New Ticket", icon: TicketPlus },
+  { to: "/worker/messages", label: "Messages", icon: MessageSquare },
   { to: "/history", label: "History", icon: History },
   { to: "/profile", label: "Profile", icon: User },
 ];
@@ -89,7 +91,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               {role === "admin" && <Shield className="h-3 w-3" />}
               <span className="font-medium truncate">{profile?.full_name || "User"}</span>
             </div>
-            <div className="opacity-60 capitalize">{role}</div>
+            <div className="opacity-60">{role === "admin" ? "Administrator" : "Employee"}</div>
           </div>
           <Button variant="ghost" size="sm" onClick={toggleDark} className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground">
             {dark ? <Sun className="h-4 w-4 mr-2" /> : <Moon className="h-4 w-4 mr-2" />}
