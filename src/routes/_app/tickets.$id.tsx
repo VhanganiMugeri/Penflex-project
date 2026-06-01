@@ -118,7 +118,7 @@ function TicketDetail() {
           ) : responses.map((r) => (
             <div key={r.id} className={`p-4 rounded-xl ${r.responder_id === ticket.worker_id ? "bg-muted/50" : "bg-primary/10 border border-primary/20"}`}>
               <div className="text-xs text-muted-foreground mb-1">
-                {r.responder_id === ticket.worker_id ? "Worker" : "Administrator"} · {format(new Date(r.created_at), "PPp")}
+                {r.responder_id === ticket.worker_id ? "Employee" : "Administrator"} · {format(new Date(r.created_at), "PPp")}
               </div>
               <div className="text-sm whitespace-pre-wrap">{r.message}</div>
             </div>
