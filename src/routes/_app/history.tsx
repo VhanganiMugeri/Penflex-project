@@ -34,7 +34,7 @@ function HistoryPage() {
           <table className="w-full text-sm">
             <thead className="bg-muted/60 text-left">
               <tr>
-                {["Ticket ID", "Worker", "Department", "Issue", "AI", "Status", "Submitted", "Resolved"].map((h) => (
+                {["Ticket ID", "Employee", "Department", "Issue", "AI", "Status", "Submitted", "Resolved"].map((h) => (
                   <th key={h} className="px-4 py-3 font-medium">{h}</th>
                 ))}
               </tr>
