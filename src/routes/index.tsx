@@ -63,7 +63,7 @@ function Landing() {
               {[
                 { icon: Brain, label: "AI Routing", val: "98%" },
                 { icon: Zap, label: "Avg resolve", val: "2.1h" },
-                { icon: Users, label: "Active workers", val: "1.2k" },
+                { icon: Users, label: "Active employees", val: "1.2k" },
                 { icon: BarChart3, label: "Tickets/mo", val: "5.4k" },
               ].map((s, i) => {
                 const Icon = s.icon;
