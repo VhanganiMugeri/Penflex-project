@@ -161,7 +161,7 @@ function RegisterForm() {
         {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />} Create account
       </Button>
       <p className="text-xs text-muted-foreground text-center">
-        Accounts are created as Worker by default.{" "}
+        Accounts are created as Employee by default.{" "}
         <Link to="/auth/admin-signup" className="text-primary hover:underline">Administrator sign-up</Link>
       </p>
     </form>
