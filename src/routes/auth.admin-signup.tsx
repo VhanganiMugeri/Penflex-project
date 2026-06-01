@@ -45,7 +45,7 @@ function AdminSignupPage() {
 
         <div className="mt-6 flex items-center justify-between text-xs">
           <Link to="/auth" search={{ mode: "register" }} className="text-muted-foreground hover:text-primary">
-            ← Worker sign up
+            ← Employee sign up
           </Link>
           <Link to="/auth/admin" search={{ mode: "login" }} className="text-primary hover:underline">
             Administrator sign in
